@@ -7,13 +7,16 @@ export default class ContentEditable extends React.Component {
   }
 
   render() {
-    var { tagName, html, ...props } = this.props;
+    var { tagName, html, innerRef, ...props } = this.props;
 
     return React.createElement(
       tagName || 'div',
       {
         ...props,
-        ref: (e) => this.htmlEl = e,
+        ref: (e) => {
+          this.htmlEl = e;
+          innerRef && innerRef(e);
+        },
         onInput: this.emitChange,
         onBlur: this.props.onBlur || this.emitChange,
         contentEditable: !this.props.disabled,
